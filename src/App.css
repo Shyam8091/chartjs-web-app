@@ -9,10 +9,10 @@
   margin-left: 4%;
   font-weight: 500;
 }
-h1{
+h1 {
   text-align: center;
 }
-select{
-  width: 4%;
+select {
+  min-width: 6%;
   margin-bottom: 4%;
 }
