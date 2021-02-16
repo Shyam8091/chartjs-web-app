@@ -7,7 +7,7 @@
  */
 import React, { Component, Fragment } from "react";
 import { client } from "../../actions/index";
-import { BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, LabelList } from "recharts";
 import ClipLoader from "react-spinners/ClipLoader";
 class Barchart extends Component {
   constructor(props) {
@@ -22,6 +22,24 @@ class Barchart extends Component {
     this.setState({
       selectedType: event.target.value,
     });
+  };
+  renderCustomizedLabel = (props) => {
+    const { x, y, width, value } = props;
+    const radius = 10;
+
+    return (
+      <Fragment>
+        <text
+          x={x + width / 2}
+          y={y - radius}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill="#8884d8"
+        >
+          {value}
+        </text>
+      </Fragment>
+    );
   };
   componentDidMount() {
     client
@@ -52,7 +70,12 @@ class Barchart extends Component {
           <XAxis dataKey="month" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey={this.state.selectedType} fill="#8884d8" />
+          <Bar dataKey={this.state.selectedType} fill="#8884d8">
+            <LabelList
+              name={this.state.selectedType}
+              content={this.renderCustomizedLabel}
+            />
+          </Bar>
         </BarChart>
       </div>
     );
@@ -61,9 +84,7 @@ class Barchart extends Component {
         <ClipLoader size={100} />
       </div>
     );
-    return (
-      <Fragment >{this.state.isLoading ? Spinner : Barchart}</Fragment>
-    );
+    return <Fragment>{this.state.isLoading ? Spinner : Barchart}</Fragment>;
   }
 }
 
