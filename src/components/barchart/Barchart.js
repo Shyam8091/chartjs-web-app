@@ -16,6 +16,7 @@ class Barchart extends Component {
       barChartData: [],
       selectedType: "A",
       isLoading: true,
+      test: [],
     };
   }
   handleSelect = (event) => {
@@ -45,8 +46,7 @@ class Barchart extends Component {
     client
       .get("/readCSV")
       .then((response) => {
-        console.log(response.data);
-        this.setState({
+      this.setState({
           barChartData: response.data,
           isLoading: false,
         });
@@ -55,6 +55,18 @@ class Barchart extends Component {
         console.warn(error);
       });
   }
+
+  sortBy = (field) => {
+    return function (a, b) {
+      if (a[field] < b[field]) {
+        return -1;
+      } else if (a[field] > b[field]) {
+        return 1;
+      }
+      return 0;
+    };
+  };
+
   render() {
     const Barchart = (
       <div className="wrapper">
@@ -66,7 +78,13 @@ class Barchart extends Component {
           <option value="D">D</option>
           <option value="E">E</option>
         </select>
-        <BarChart width={700} height={400} data={this.state.barChartData}>
+        <BarChart
+          width={700}
+          height={440}
+          data={this.state.barChartData.sort(
+            this.sortBy(this.state.selectedType)
+          )}
+        >
           <XAxis dataKey="month" />
           <YAxis />
           <Tooltip />
